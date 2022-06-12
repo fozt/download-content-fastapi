@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+download_content_fastapi/db.json
+download_content_fastapi/data
+.idea

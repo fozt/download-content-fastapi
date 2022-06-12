@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+
+  fastapi_downloader:
+    container_name: fastapi_downloader
+    build: ./download_content_fastapi
+    restart: always
+    command: "uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8000"
+    volumes:
+      - ./download_content_fastapi:/code
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    env_file: ".env"
