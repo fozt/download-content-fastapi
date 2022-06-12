@@ -131,3 +131,4 @@ dmypy.json
 download_content_fastapi/db.json
 download_content_fastapi/data
 .idea
+download_content_fastapi/download_media.py

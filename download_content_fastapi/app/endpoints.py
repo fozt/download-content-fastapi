@@ -1,10 +1,9 @@
 from typing import List, Optional
 
-from fastapi import APIRouter, Form, UploadFile
-from fastapi.responses import Response
+from fastapi import APIRouter, Form, HTTPException, Response, UploadFile, status
 
 from app.db import get_all, insert_file
-from app.schemas import ContentRead
+from app.schemas import ContentInDB, ContentRead
 from app.services import get_media, save_media
 
 api_router = APIRouter(prefix="/downloader")
@@ -17,9 +16,9 @@ def upload_content(
     title: str = Form(),
     description: str = Form(default=""),
 ):
-    content = ContentRead(
-        coverUrl=save_media(coverFile),
-        musicUrl=save_media(musicFile),
+    save_media(coverFile)
+    save_media(musicFile)
+    content = ContentInDB(
         coverFileName=coverFile.filename,
         musicFileName=musicFile.filename,
         title=title,
@@ -36,4 +35,7 @@ def get_all_contents():
 
 @api_router.get("/{filename}")
 def get_content(filename: str):
-    return Response(**get_media(filename))
+    try:
+        return Response(**get_media(filename))
+    except FileNotFoundError:
+        return HTTPException(status_code=status.HTTP_404_NOT_FOUND)
